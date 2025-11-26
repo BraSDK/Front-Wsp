@@ -11,8 +11,8 @@ export function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* Páginas públicas */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        {/*<Route path="/" element={<Home />} />*/}
+        <Route path="/" element={<Login />} />
 
         {/* Rutas protegidas (con sidebar y header) */}
         <Route
