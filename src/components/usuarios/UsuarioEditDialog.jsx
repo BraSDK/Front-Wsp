@@ -11,6 +11,7 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
     name: "",
     email: "",
     role_id: 2,
+    role_name: ""
   });
 
   // Cargar datos del usuario → GET /users/{id}
@@ -27,6 +28,7 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
           name: u.name ?? "",
           email: u.email ?? "",
           role_id: u.role_id ?? 2,
+          role_name: u.role_name ?? ""
         });
 
       } catch (err) {
@@ -84,13 +86,21 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
             </div>
 
             <div>
-              <Label>Rol (role_id)</Label>
-              <Input
-                type="number"
+              <Label>Rol</Label>
+              <select
+                className="border rounded p-2 w-full"
                 value={form.role_id}
-                onChange={(e) => setForm({ ...form, role_id: Number(e.target.value) })}
-              />
+                onChange={(e) =>
+                  setForm({ ...form, role_id: Number(e.target.value) })
+                }
+              >
+                <option value="1">Administrador</option>
+                <option value="2">Editor</option>
+                <option value="3">Super Admin</option>
+                <option value="4">Usuario</option>
+              </select>
             </div>
+
           </div>
         )}
 

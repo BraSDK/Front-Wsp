@@ -1,8 +1,8 @@
 // src/components/usuarios/usuarios-columns.jsx
 
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-export const usuariosColumns = (handleEdit) => [
+export const usuariosColumns = (handleEdit, handleDelete) => [
   {
     accessorKey: "id",
     header: "ID",
@@ -21,13 +21,23 @@ export const usuariosColumns = (handleEdit) => [
       const user = row.original;
 
       return (
-        <button
-          className="text-blue-600 hover:text-blue-800 p-2"
-          onClick={() => handleEdit(user.id)}
-          title="Editar usuario"
-        >
-          <Pencil className="h-4 w-4" />
-        </button>
+        <div className="flex gap-3">
+          {/* Editar */}
+          <button
+            className="text-blue-600"
+            onClick={() => handleEdit(user.id)}
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+
+          {/* Eliminar */}
+          <button
+            className="text-red-600"
+            onClick={() => handleDelete(user.id)}
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       );
     },
   },

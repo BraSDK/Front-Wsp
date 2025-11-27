@@ -47,7 +47,7 @@ export default function Usuarios() {
         </CardHeader>
 
         <CardContent>
-          <UsuariosTable usuarios={usuarios} />
+          <UsuariosTable usuarios={usuarios} refresh={fetchUsers} />
         </CardContent>
       </Card>
     </div>

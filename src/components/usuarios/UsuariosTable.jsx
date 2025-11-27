@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { usuariosColumns } from "./usuarios-columns";
 import UsuarioEditDialog from "./UsuarioEditDialog";
+import UsuarioDeleteDialog from "./UsuarioDeleteDialog";
 import { api } from "@/api/axios";
 import {
     useReactTable,
@@ -15,7 +16,18 @@ import {
   export default function UsuariosTable({ usuarios, refresh }) {
     const [sorting, setSorting] = useState([]);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
-    const columns = usuariosColumns((id) => setUserIdToEdit(id));
+    const [userIdToDelete, setUserIdToDelete] = useState(null);
+
+    // Aquí agregamos ambas funciones
+    const handleEdit = (id) => {
+      setUserIdToEdit(id);
+    };
+
+    const handleDelete = (id) => {
+      setUserIdToDelete(id); // Aquí sí usamos el estado
+    };
+
+    const columns = usuariosColumns(handleEdit, handleDelete);
   
     const table = useReactTable({
       data: usuarios,
@@ -87,6 +99,15 @@ import {
         userId={userIdToEdit}
         onClose={() => setUserIdToEdit(null)}
         onUpdated={refresh}
+        api={api}
+      />
+
+      {/* Modal Eliminar */}
+      <UsuarioDeleteDialog
+        open={!!userIdToDelete}
+        userId={userIdToDelete}
+        onClose={() => setUserIdToDelete(null)}
+        onDeleted={refresh}
         api={api}
       />
     </>
