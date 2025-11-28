@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, api }) {
   const [loading, setLoading] = useState(true);
+  const [roles, setRoles] = useState([]);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,18 +19,30 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
   useEffect(() => {
     if (!open || !userId) return;
 
-    const fetchUser = async () => {
+    const fetchData  = async () => {
       try {
         setLoading(true);
+
+        // 1. Obtener usuario
         const res = await api.get(`/users/${userId}`);
         const u = res.data.user ?? res.data;
+
+        console.log("🎯 Usuario recibido:", u);
 
         setForm({
           name: u.name ?? "",
           email: u.email ?? "",
-          role_id: u.role_id ?? 2,
+          role_id: Number(u.role_id) || "",
           role_name: u.role_name ?? ""
         });
+
+
+        // 2. Obtener roles dinámicos
+        const rolesRes = await api.get("/roles");
+        setRoles(rolesRes.data.roles || rolesRes.data);
+
+        console.log("📦 Roles recibidos:", rolesRes.data.roles || rolesRes.data);
+
 
       } catch (err) {
         alert("Error cargando usuario");
@@ -39,7 +52,7 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
       }
     };
 
-    fetchUser();
+    fetchData ();
   }, [open, userId, api]);
 
   // Enviar actualización → PUT /users/{id}
@@ -57,6 +70,7 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
   };
 
   if (!open) return null;
+  console.log("🔍 render → form.role_id:", form.role_id, "roles:", roles);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -87,18 +101,20 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
 
             <div>
               <Label>Rol</Label>
-              <select
-                className="border rounded p-2 w-full"
-                value={form.role_id}
-                onChange={(e) =>
-                  setForm({ ...form, role_id: Number(e.target.value) })
-                }
-              >
-                <option value="1">Administrador</option>
-                <option value="2">Editor</option>
-                <option value="3">Super Admin</option>
-                <option value="4">Usuario</option>
-              </select>
+                <select
+                  className="border rounded p-2 w-full"
+                  value={Number(form.role_id)}
+                  onChange={(e) =>
+                    setForm({ ...form, role_id: Number(e.target.value) })
+                  }
+                >
+                  <option value="">Seleccione un rol</option>
+                  {roles.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
             </div>
 
           </div>
