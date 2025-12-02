@@ -50,7 +50,7 @@ import {
                 {headerGroup.headers.map(header => (
                   <TableHead
                     key={header.id}
-                    className="cursor-pointer select-none"
+                    className="cursor-pointer select-none text-left whitespace-nowrap"
                     onClick={header.column.getToggleSortingHandler()}
                   >
                     {flexRender(
@@ -74,7 +74,7 @@ import {
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="text-left whitespace-nowrap">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

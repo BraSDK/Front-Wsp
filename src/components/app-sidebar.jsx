@@ -8,8 +8,9 @@ import {
     SidebarMenuItem,
   } from "@/components/ui/sidebar";
   
-  import { Home, LogOut, User, Users as UsersIcon } from "lucide-react";
+  import { Home, LogOut, User, Users as UsersIcon, Building2 } from "lucide-react";
   import { Link, useNavigate } from "react-router-dom";
+  import logo from "@/assets/img/sales-header.png";
   
   export function AppSidebar() {
     const navigate = useNavigate();
@@ -21,9 +22,15 @@ import {
   
     return (
       <Sidebar>
-        <SidebarHeader className="px-4 py-4 font-bold text-xl">
-          Mi Sistema
-        </SidebarHeader>
+      <SidebarHeader className="px-4 py-4">
+        <div className="flex items-center justify-center">
+          <img 
+            src={logo} 
+            alt="Logo del sistema" 
+            className="h-10 w-auto object-contain"
+          />
+        </div>
+      </SidebarHeader>
   
         <SidebarContent>
           <SidebarMenu>
@@ -43,6 +50,15 @@ import {
                     Usuarios
                 </Link>
                 </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link to="/empresas" className="flex items-center">
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Empresas
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
 
             <SidebarMenuItem>

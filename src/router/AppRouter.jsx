@@ -12,7 +12,7 @@ export function AppRouter() {
       <Routes>
         {/* Páginas públicas */}
         {/*<Route path="/" element={<Home />} />*/}
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Rutas protegidas (con sidebar y header) */}
         <Route
