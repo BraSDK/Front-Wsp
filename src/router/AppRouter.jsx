@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import Usuarios from "../pages/Usuarios";
+import Empresas from "../pages/Empresas";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 
@@ -32,6 +33,17 @@ export function AppRouter() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Usuarios />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/empresas"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Empresas />
               </DashboardLayout>
             </ProtectedRoute>
           }
