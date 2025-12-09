@@ -1,6 +1,7 @@
 // src/components/empresas/EmpresasTable.jsx
 import { useState } from "react";
 import { empresasColumns } from "./empresas-columns";
+import EmpresaEditDialog from "./EmpresaEditDialog";
 import EmpresaDeleteDialog from "./EmpresaDeleteDialog";
 import { api } from "@/api/axios";
 import {
@@ -14,23 +15,29 @@ import {
 
   export default function EmpresasTable({ empresas, refresh }) {
     const [sorting, setSorting] = useState([]);
+    const [CompaniesIdToEdit, setCompaniesIdToEdit] = useState(null);
     const [CompaniesIdToDelete, setCompaniesIdToDelete] = useState(null);
+
+    // Aquí agregamos ambas funciones
+    const handleEdit = (id) => {
+        setCompaniesIdToEdit(id);
+      };
 
     const handleDelete = (id) => {
         setCompaniesIdToDelete(id); // Aquí sí usamos el estado
       };
 
-    const columns = empresasColumns(handleDelete);
+    const columns = empresasColumns(handleEdit, handleDelete);
 
     const table = useReactTable({
-    data: empresas,
-    columns,
-    state: {
-        sorting,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+      data: empresas,
+      columns,
+      state: {
+          sorting,
+      },
+      onSortingChange: setSorting,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     });
 
     return (
@@ -87,15 +94,21 @@ import {
             </Table>
         </div>
         {/* 📌 Modal editar */}
-
+        <EmpresaEditDialog
+          open={!!CompaniesIdToEdit}
+          companieId={CompaniesIdToEdit}
+          onClose={() => setCompaniesIdToEdit(null)}
+          onUpdated={refresh}
+          api={api}
+        />
 
         {/* Modal Eliminar */}
         <EmpresaDeleteDialog
-        open={!!CompaniesIdToDelete}
-        userId={CompaniesIdToDelete}
-        onClose={() => setCompaniesIdToDelete(null)}
-        onDeleted={refresh}
-        api={api}
+          open={!!CompaniesIdToDelete}
+          companieId={CompaniesIdToDelete}
+          onClose={() => setCompaniesIdToDelete(null)}
+          onDeleted={refresh}
+          api={api}
         />
     </>
     );

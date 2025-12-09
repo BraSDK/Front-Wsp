@@ -11,15 +11,17 @@ import { Label } from "@/components/ui/label";
 import { api } from "@/api/axios";
 
 export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
+  const [preview, setPreview] = useState(null);
   const [users, setUsers] = useState([]);
 
   const [form, setForm] = useState({
     name: "",
     ruc: "",
     email: "",
-    Description: "",
+    description: "",
     address: "",
-    admin_user_id: 2
+    admin_user_id: 2,
+    logo: null,
   });
 
   // Cargar roles al abrir modal
@@ -39,15 +41,53 @@ export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
     fetchUsers();
   }, [open]);
 
+  useEffect(() => {
+    if (!open && preview) {
+      URL.revokeObjectURL(preview);
+      setPreview(null);
+    }
+  }, [open, preview]);  
+
   // Crear empresa
   const handleCreate = async () => {
     try {
-      await api.post("/companies", form);
-      onSuccess(); // recargar lista
+      const formData = new FormData();
+  
+      formData.append("name", form.name);
+      formData.append("ruc", form.ruc);
+      formData.append("description", form.description);
+      formData.append("address", form.address);
+  
+      if (form.logo) {
+        formData.append("logo", form.logo); // ✅ archivo
+      }
+  
+      await api.post("/companies", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      onSuccess();
       setOpen(false);
-      setForm({ name: "", ruc: "", description: "", address: "", admin_user_id: 2 });
+  
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+      setPreview(null);
+
+      // Reset
+      setForm({
+        name: "",
+        ruc: "",
+        description: "",
+        address: "",
+        admin_user_id: 2,
+        logo: null,
+      });
     } catch (err) {
-      alert(err.response?.data?.msg || "Error al registrar usuario");
+      console.error(err);
+      alert(err.response?.data?.msg || "Error al registrar empresa");
     }
   };
 
@@ -99,6 +139,28 @@ export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
             />
+          </div>
+
+          <div>
+            <Label>Logo de la empresa</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                setForm({ ...form, logo: file });
+                setPreview(file ? URL.createObjectURL(file) : null);
+              }}
+            />
+            {preview && (
+              <div className="mt-2 flex justify-center">
+                <img
+                  src={preview}
+                  alt="Preview Logo"
+                  className="w-32 h-32 object-contain rounded border"
+                />
+              </div>
+            )}
           </div>
 
           <div>

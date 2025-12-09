@@ -2,7 +2,7 @@
 
 import { Pencil, Trash2 } from "lucide-react";
 
-export const empresasColumns = (handleDelete) => [
+export const empresasColumns = (handleEdit, handleDelete) => [
   {
     accessorKey: "id",
     header: "ID",
@@ -30,6 +30,13 @@ export const empresasColumns = (handleDelete) => [
 
       return (
         <div className="flex gap-3">
+          {/* Editar */}
+          <button
+            className="text-blue-600"
+            onClick={() => handleEdit(empresa.id)}
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
 
           {/* Eliminar */}
           <button
