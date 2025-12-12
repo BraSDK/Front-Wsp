@@ -13,7 +13,7 @@ import { api } from "@/api/axios";
 export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
   const [preview, setPreview] = useState(null);
   const [users, setUsers] = useState([]);
-
+  const [admins, setAdmins] = useState([]);
   const [form, setForm] = useState({
     name: "",
     ruc: "",
@@ -27,19 +27,19 @@ export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
   // Cargar roles al abrir modal
   useEffect(() => {
     if (!open) return;
-
-    const fetchUsers = async () => {
+  
+    const fetchAdmins = async () => {
       try {
-        const res = await api.get("/users/list");
-        setUsers(res.data.users || res.data);
+        const res = await api.get("/users/admins");
+        setAdmins(res.data.users || res.data);
       } catch (err) {
         console.error(err);
-        alert("Error cargando roles");
+        alert("Error cargando administradores");
       }
     };
-
-    fetchUsers();
-  }, [open]);
+  
+    fetchAdmins();
+  }, [open]);  
 
   useEffect(() => {
     if (!open && preview) {
@@ -174,7 +174,7 @@ export default function EmpresaCreateDialog({ open, setOpen, onSuccess }) {
             >
               <option value="">Seleccione un Usuario</option>
 
-              {users.map((r) => (
+              {admins.map((r) => (
                 <option key={r.id} value={r.id}>
                   {r.name}
                 </option>

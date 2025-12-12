@@ -1,5 +1,5 @@
 // src/components/usuarios/UsuariosTable.jsx
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { usuariosColumns } from "./usuarios-columns";
 import UsuarioEditDialog from "./UsuarioEditDialog";
 import UsuarioDeleteDialog from "./UsuarioDeleteDialog";
@@ -17,7 +17,7 @@ import {
     const [sorting, setSorting] = useState([]);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userIdToDelete, setUserIdToDelete] = useState(null);
-
+    
     // Aquí agregamos ambas funciones
     const handleEdit = (id) => {
       setUserIdToEdit(id);
@@ -28,7 +28,7 @@ import {
     };
 
     const columns = usuariosColumns(handleEdit, handleDelete);
-  
+
     const table = useReactTable({
       data: usuarios,
       columns,

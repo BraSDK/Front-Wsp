@@ -13,10 +13,20 @@ export default function Usuarios() {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
 
+  // ✅ PASO 1: Usuario logueado desde localStorage
+  const authUser = JSON.parse(localStorage.getItem("user"));
+
+  // ✅ PASO 2: Permisos por rol
+  const canCreateUser =
+    authUser?.role_id === 1 || authUser?.role_id === 2;
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/users/list");
+      const res = await api.get("/user-company/by-company");
+      
+      console.log("🔥 RESPUESTA DEL BACKEND:", res.data);
+
       const usersData = res.data.users ?? res.data;
       setUsuarios(Array.isArray(usersData) ? usersData : []);
     } catch (err) {
@@ -39,11 +49,13 @@ export default function Usuarios() {
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Usuarios ({usuarios.length})</CardTitle>
 
+          {canCreateUser && (
           <UsuarioCreateDialog
             open={open}
             setOpen={setOpen}
             onSuccess={fetchUsers}
           />
+          )}
         </CardHeader>
 
         <CardContent>
