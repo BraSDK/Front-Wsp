@@ -8,15 +8,21 @@ import {
     useReactTable,
     getCoreRowModel,
     getSortedRowModel,
+    getPaginationRowModel,
     flexRender,
   } from "@tanstack/react-table";
-  
+  import { Button } from "@/components/ui/button";
   import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
   
   export default function UsuariosTable({ usuarios, refresh }) {
     const [sorting, setSorting] = useState([]);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userIdToDelete, setUserIdToDelete] = useState(null);
+
+    const [pagination, setPagination] = useState({
+      pageIndex: 0,
+      pageSize: 10, // usuarios por página
+    });
     
     // Aquí agregamos ambas funciones
     const handleEdit = (id) => {
@@ -34,10 +40,13 @@ import {
       columns,
       state: {
         sorting,
+        pagination,
       },
       onSortingChange: setSorting,
+      onPaginationChange: setPagination,
       getCoreRowModel: getCoreRowModel(),
       getSortedRowModel: getSortedRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
     });
   
     return (
@@ -92,6 +101,34 @@ import {
             )}
           </TableBody>
         </Table>
+        <div className="flex items-center justify-between px-2 py-4">
+          {/* Información */}
+          <div className="text-sm text-muted-foreground">
+            Página {table.getState().pagination.pageIndex + 1} de{" "}
+            {table.getPageCount()}
+          </div>
+
+          {/* Controles */}
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Anterior
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Siguiente
+            </Button>
+          </div>
+        </div>
       </div>
       {/* 📌 Modal editar */}
       <UsuarioEditDialog
