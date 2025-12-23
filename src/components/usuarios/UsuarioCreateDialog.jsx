@@ -30,7 +30,7 @@ export default function UsuarioCreateDialog({ open, setOpen, onSuccess }) {
       try {
         const [rolesRes, companiesRes] = await Promise.all([
           api.get("/roles"),
-          api.get("/companies") // 🔹 este endpoint ya lo deberías tener
+          api.get("/companies")
         ]);
   
         setRoles(rolesRes.data.roles || rolesRes.data);

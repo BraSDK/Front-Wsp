@@ -1,3 +1,5 @@
+// src/components/login-form.jsx
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,6 +22,9 @@ export function LoginForm() {
       // Guardar token
       localStorage.setItem("token", res.data.token)
       localStorage.setItem("user", JSON.stringify(res.data.user))
+
+      // 🔹 Guardar empresa
+      localStorage.setItem("company", JSON.stringify(res.data.company));
 
       // Redirigir
       window.location.href = "/dashboard"

@@ -10,25 +10,31 @@ import {
   
   import { Home, LogOut, User, Users as UsersIcon, Building2 } from "lucide-react";
   import { Link, useNavigate } from "react-router-dom";
-  import logo from "@/assets/img/sales-header.png";
+  //import logo from "@/assets/img/sales-header.png";
   
   export function AppSidebar() {
+    const company = JSON.parse(localStorage.getItem("company"));
     const navigate = useNavigate();
   
     const handleLogout = () => {
-      localStorage.removeItem("token");
+      localStorage.clear();
       navigate("/login");
     };
+    console.log(import.meta.env.VITE_ASSETS_URL)
   
     return (
       <Sidebar>
       <SidebarHeader className="px-4 py-4">
         <div className="flex items-center justify-center">
-          <img 
-            src={logo} 
-            alt="Logo del sistema" 
-            className="h-10 w-auto object-contain"
-          />
+        <img
+          src={
+            company?.logo
+              ? `${import.meta.env.VITE_ASSETS_URL}/${company.logo}` // ✅ Sin /uploads/
+              : "/default-logo.png"
+          }
+          alt={company?.name || "Logo"}
+          className="h-10 w-auto object-contain"
+        />
         </div>
       </SidebarHeader>
   

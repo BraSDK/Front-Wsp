@@ -8,11 +8,15 @@ import { useState, useEffect } from "react";
 export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, api }) {
   const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const authUser = JSON.parse(localStorage.getItem("user"));
+
   const [form, setForm] = useState({
     name: "",
     email: "",
     role_id: 2,
-    role_name: ""
+    role_name: "",
+    company_id: ""
   });
 
   // Cargar datos del usuario → GET /users/{id}
@@ -33,7 +37,8 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
           name: u.name ?? "",
           email: u.email ?? "",
           role_id: Number(u.role_id) || "",
-          role_name: u.role_name ?? ""
+          role_name: u.role_name ?? "",
+          company_id: u.company_id || ""
         });
 
 
@@ -43,6 +48,11 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
 
         console.log("📦 Roles recibidos:", rolesRes.data.roles || rolesRes.data);
 
+        // 3. Empresas (solo SuperAdmin)
+        if (authUser?.role_id === 1) {
+          const companiesRes = await api.get("/companies");
+          setCompanies(companiesRes.data.companies || companiesRes.data);
+        }
 
       } catch (err) {
         alert("Error cargando usuario");
@@ -116,6 +126,27 @@ export default function UsuarioEditDialog({ open, onClose, userId, onUpdated, ap
                   ))}
                 </select>
             </div>
+
+              {/* Empresa → Solo SuperAdmin */}
+              {authUser?.role_id === 1 && (
+                <div>
+                  <Label>Empresa</Label>
+                  <select
+                    className="border rounded p-2 w-full"
+                    value={form.company_id}
+                    onChange={(e) =>
+                      setForm({ ...form, company_id: Number(e.target.value) })
+                    }
+                  >
+                    <option value="">Seleccione una empresa</option>
+                    {companies.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
           </div>
         )}
