@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import Usuarios from "../pages/Usuarios";
 import Empresas from "../pages/Empresas";
+import Campanas from "../pages/Campanas";
 import ProtectedRoute from "./ProtectedRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 
@@ -33,6 +34,17 @@ export function AppRouter() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Usuarios />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/campanas"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Campanas />
               </DashboardLayout>
             </ProtectedRoute>
           }

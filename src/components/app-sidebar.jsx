@@ -69,6 +69,15 @@ import {
 
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
+                <Link to="/campanas" className="flex items-center">
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Campañas
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
                 <Link to="/perfil">
                   <User className="mr-2 h-4 w-4" />
                   Perfil
