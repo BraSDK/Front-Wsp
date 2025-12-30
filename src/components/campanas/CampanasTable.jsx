@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { campanasColumns } from "./campanas-columns";
 import AsignarUsuariosDialog from "./AsignarUsuariosDialog";
+import DesasignarUsuariosDialog from "./DesasignarUsuariosDialog";
 import { api } from "@/api/axios";
 import {
   Table,
@@ -22,14 +23,19 @@ import {
 export default function CampanasTable({ campanas, refresh }) {
   const [sorting, setSorting] = useState([]);
   const [selectedCampana, setSelectedCampana] = useState(null);
+  const [unassignCampana, setUnassignCampana] = useState(null);
 
   // 👇 handler que se pasa a las columnas
   const handleAssignUsers = (campanaId) => {
     setSelectedCampana(campanaId);
   };
 
+  // 📌 Abrir modal desasignar
+  const handleUnassignUsers = (campanaId) => {
+    setUnassignCampana(campanaId);
+  };
 
-  const columns = campanasColumns(handleAssignUsers);
+  const columns = campanasColumns(handleAssignUsers, handleUnassignUsers);
 
   const table = useReactTable({
     data: campanas,
@@ -99,6 +105,15 @@ export default function CampanasTable({ campanas, refresh }) {
           campanaId={selectedCampana}
           onClose={() => setSelectedCampana(null)}
           onAssigned={refresh}
+          api={api}
+        />
+
+        {/* 📌 Modal Desasignar */}
+        <DesasignarUsuariosDialog
+          open={!!unassignCampana}
+          campanaId={unassignCampana}
+          onClose={() => setUnassignCampana(null)}
+          onUnassigned={refresh}
           api={api}
         />
     </>

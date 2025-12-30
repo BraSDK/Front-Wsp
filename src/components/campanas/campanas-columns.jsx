@@ -1,10 +1,10 @@
 // src/components/campanas/campanas-columns.jsx
 
 import { Pencil, Trash2 } from "lucide-react";
-import { Users } from "lucide-react";
+import { Users, UserMinus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const campanasColumns = (onAssignUsers, handleEdit, handleDelete) => [
+export const campanasColumns = (onAssignUsers, onUnassignUsers, handleEdit, handleDelete) => [
   {
     accessorKey: "id",
     header: "ID",
@@ -23,7 +23,7 @@ export const campanasColumns = (onAssignUsers, handleEdit, handleDelete) => [
       const campana = row.original;
 
       return (
-        <div className="flex justify-end gap-2">
+        <div className="flex gap-3">
           <Button
             size="sm"
             variant="outline"
@@ -31,6 +31,15 @@ export const campanasColumns = (onAssignUsers, handleEdit, handleDelete) => [
           >
             <Users className="w-4 h-4 mr-1" />
             Asignar
+          </Button>
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onUnassignUsers(campana.id)}
+          >
+            <UserMinus className="w-4 h-4 mr-1 text-red-500" />
+            Desasignar
           </Button>
         </div>
       );

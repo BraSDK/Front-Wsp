@@ -9,13 +9,15 @@ import {
     CardContent,
   } from "@/components/ui/card";
 
-  
+import { Button } from "@/components/ui/button";  
 import CampanasTable from "@/components/campanas/CampanasTable";
+import CampanaCreateDialog from "@/components/campanas/CampanaCreateDialog";
 
 export default function Campanas() {
     const [campanas, setCampanas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [open, setOpen] = useState(false);
   
     const fetchCampanas = async () => {
       try {
@@ -39,18 +41,30 @@ export default function Campanas() {
   
     return (
       <div className="p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Campañas ({campanas.length})</CardTitle>
-          </CardHeader>
-  
-          <CardContent>
-            <CampanasTable
-              campanas={campanas}
-              refresh={fetchCampanas}
-            />
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+      <Card>
+        <CardHeader className="flex justify-between items-center">
+          <CardTitle>Campañas ({campanas.length})</CardTitle>
+
+          {/* 🔥 Botón crear campaña */}
+          <Button onClick={() => setOpen(true)}>
+            Nueva campaña
+          </Button>
+        </CardHeader>
+
+        <CardContent>
+          <CampanasTable
+            campanas={campanas}
+            refresh={fetchCampanas}
+          />
+        </CardContent>
+      </Card>
+
+      {/* 🔥 Modal crear campaña */}
+      <CampanaCreateDialog
+        open={open}
+        setOpen={setOpen}
+        onSuccess={fetchCampanas}
+      />
+    </div>
+  );
+}
