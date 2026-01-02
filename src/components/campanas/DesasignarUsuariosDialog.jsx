@@ -1,5 +1,6 @@
 // src/components/campanas/DesasignarUsuariosDialog.jsx
 import { useEffect, useState } from "react";
+import { api } from "@/api/axios";
 import {
   Dialog,
   DialogContent,

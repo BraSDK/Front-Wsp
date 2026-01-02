@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { usuariosColumns } from "./usuarios-columns";
 import UsuarioEditDialog from "./UsuarioEditDialog";
+import { CompanyFilter } from "./CompanyFilter";
 import UsuarioDeleteDialog from "./UsuarioDeleteDialog";
 import { api } from "@/api/axios";
 import {
@@ -18,6 +19,33 @@ import {
     const [sorting, setSorting] = useState([]);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userIdToDelete, setUserIdToDelete] = useState(null);
+    const [empresa, setEmpresa] = useState("all");
+
+    // 🔹 Empresas únicas para el filtro
+    const empresas = useMemo(() => {
+      const unique = new Set(
+        usuarios
+          .map(u => u.company_name)
+          .filter(Boolean)
+      );
+      return ["all", ...unique];
+    }, [usuarios]);
+
+    // 🔹 Usuarios filtrados por empresa
+    const usuariosFiltrados = useMemo(() => {
+      if (empresa === "all") return usuarios;
+
+      return usuarios.filter(
+        u => u.company_name === empresa
+      );
+    }, [usuarios, empresa]);
+
+    const companyOptions = empresas
+    .filter(e => e !== "all")
+    .map(emp => ({
+      label: emp,
+      value: emp,
+    }));
 
     const [pagination, setPagination] = useState({
       pageIndex: 0,
@@ -36,7 +64,7 @@ import {
     const columns = usuariosColumns(handleEdit, handleDelete);
 
     const table = useReactTable({
-      data: usuarios,
+      data: usuariosFiltrados,
       columns,
       state: {
         sorting,
@@ -52,6 +80,15 @@ import {
     return (
     <>
       <div className="rounded-lg border mt-4">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-sm font-medium">Empresa:</span>
+
+          <CompanyFilter
+            companies={empresas.filter(e => e !== "all")}
+            value={empresa}
+            onChange={setEmpresa}
+          />
+        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (

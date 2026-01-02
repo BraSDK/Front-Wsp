@@ -25,6 +25,14 @@ export const usuariosColumns = (handleEdit, handleDelete) => {
       header: "Email",
     },
     {
+      accessorKey: "role_name",
+      header: "Rol",
+    },
+    {
+      accessorKey: "company_name",
+      header: "Empresa",
+    },
+    {
       header: "Acciones",
       cell: ({ row }) => {
         const user = row.original;
