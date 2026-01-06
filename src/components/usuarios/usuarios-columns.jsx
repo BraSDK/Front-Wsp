@@ -19,10 +19,12 @@ export const usuariosColumns = (handleEdit, handleDelete) => {
     {
       accessorKey: "name",
       header: "Nombre",
+      enableColumnFilter: true,
     },
     {
       accessorKey: "email",
       header: "Email",
+      enableColumnFilter: true,
     },
     {
       accessorKey: "role_name",

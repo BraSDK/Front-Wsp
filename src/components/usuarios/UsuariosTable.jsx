@@ -10,12 +10,15 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     getPaginationRowModel,
+    getFilteredRowModel,
     flexRender,
   } from "@tanstack/react-table";
+  import { Input } from "@/components/ui/input";
   import { Button } from "@/components/ui/button";
   import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
   
   export default function UsuariosTable({ usuarios, refresh }) {
+    const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
     const [userIdToEdit, setUserIdToEdit] = useState(null);
     const [userIdToDelete, setUserIdToDelete] = useState(null);
@@ -69,26 +72,39 @@ import {
       state: {
         sorting,
         pagination,
+        columnFilters,
       },
       onSortingChange: setSorting,
       onPaginationChange: setPagination,
+      onColumnFiltersChange: setColumnFilters,
+
       getCoreRowModel: getCoreRowModel(),
       getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
     });
   
     return (
     <>
       <div className="rounded-lg border mt-4">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-sm font-medium">Empresa:</span>
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium">Empresa:</span>
+        <CompanyFilter
+          companies={empresas.filter(e => e !== "all")}
+          value={empresa}
+          onChange={setEmpresa}
+        />
+        {/* 🔍 Buscador */}
+        <Input
+          placeholder="Buscar por email..."
+          value={table.getColumn("email")?.getFilterValue() ?? ""}
+          onChange={(e) =>
+            table.getColumn("email")?.setFilterValue(e.target.value)
+          }
+          className="max-w-sm ml-auto"
+        />
+      </div>
 
-          <CompanyFilter
-            companies={empresas.filter(e => e !== "all")}
-            value={empresa}
-            onChange={setEmpresa}
-          />
-        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
